@@ -107,3 +107,12 @@ pytest_*.txt
 mypy_*.txt
 pytest_summary.txt
 pytest_collect.txt
+# frontend (Next.js)
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/build/
+frontend/coverage/
+frontend/.vercel/
+frontend/*.tsbuildinfo
+frontend/next-env.d.ts

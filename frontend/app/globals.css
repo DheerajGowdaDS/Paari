@@ -1,0 +1,180 @@
+@import "tailwindcss";
+
+/* ============================================================
+   Paari design tokens — ported 1:1 from the approved design
+   system (Material 3 tonal palette, Manrope + JetBrains Mono)
+   ============================================================ */
+@theme {
+  /* Color: Material 3 neutral palette used across Paari surfaces */
+  --color-surface: #faf9f7;
+  --color-surface-dim: #dadad8;
+  --color-surface-bright: #faf9f7;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f4f3f1;
+  --color-surface-container: #efeeec;
+  --color-surface-container-high: #e9e8e6;
+  --color-surface-container-highest: #e3e2e0;
+  --color-surface-variant: #e3e2e0;
+  --color-background: #faf9f7;
+  --color-on-background: #1a1c1b;
+  --color-on-surface: #1a1c1b;
+  --color-on-surface-variant: #47464b;
+  --color-primary: #000000;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #1b1b1e;
+  --color-on-primary-container: #858387;
+  --color-primary-fixed: #e4e1e6;
+  --color-on-primary-fixed: #1b1b1e;
+  --color-primary-fixed-dim: #c8c5ca;
+  --color-on-primary-fixed-variant: #47464a;
+  --color-secondary: #5d5e66;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #e3e1ec;
+  --color-on-secondary-container: #63646c;
+  --color-secondary-fixed: #e3e1ec;
+  --color-on-secondary-fixed: #1a1b22;
+  --color-secondary-fixed-dim: #c6c5cf;
+  --color-on-secondary-fixed-variant: #46464e;
+  --color-tertiary: #000000;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #2c1600;
+  --color-on-tertiary-container: #a77b4e;
+  --color-tertiary-fixed: #ffdcbd;
+  --color-on-tertiary-fixed: #2c1600;
+  --color-tertiary-fixed-dim: #f0bd8b;
+  --color-on-tertiary-fixed-variant: #623f18;
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+  --color-outline: #77767b;
+  --color-outline-variant: #c8c5cb;
+  --color-inverse-surface: #2f3130;
+  --color-inverse-on-surface: #f1f1ef;
+  --color-inverse-primary: #c8c5ca;
+  --color-surface-tint: #5f5e61;
+
+  /* Radius: DEFAULT and sm are pinned to the Tailwind v3 values the
+     original pages were built with (v4 renamed the scale, which would
+     inflate small radii — rounded-sm was 0.125rem in v3). lg/xl stay at
+     defaults so the Control Plane page keeps its original radii. */
+  --radius-DEFAULT: 1rem;
+  --radius-sm: 0.125rem;
+
+  /* Spacing scale */
+  --spacing-space-3xs: 0.125rem;
+  --spacing-space-2xs: 0.25rem;
+  --spacing-space-xs: 0.5rem;
+  --spacing-space-sm: 0.75rem;
+  --spacing-space-md: 1rem;
+  --spacing-space-lg: 1.5rem;
+  --spacing-space-xl: 2rem;
+  --spacing-space-2xl: 3rem;
+  --spacing-space-3xl: 4rem;
+  --spacing-space-4xl: 6rem;
+  --spacing-gutter-mobile: 1rem;
+  --spacing-gutter-desktop: 2rem;
+
+  /* Layout */
+  --container-max-width: 1280px;
+
+  /* Typography: role-based families */
+  --font-sans: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, SFMono-Regular, monospace;
+  --font-body-lg: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-body-md: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-body-sm: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-headline-lg: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-headline-md: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-headline-sm: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-headline-xl: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-display-hero: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-display-hero-mobile: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  --font-mono-label: var(--font-jetbrains-mono), ui-monospace, monospace;
+  --font-mono-metric: var(--font-jetbrains-mono), ui-monospace, monospace;
+
+  /* Type scale with weights / tracking baked in */
+  --text-display-hero: 56px;
+  --text-display-hero--line-height: 64px;
+  --text-display-hero--letter-spacing: -0.03em;
+  --text-display-hero--font-weight: 400;
+  --text-display-hero-mobile: 36px;
+  --text-display-hero-mobile--line-height: 44px;
+  --text-display-hero-mobile--letter-spacing: -0.02em;
+  --text-display-hero-mobile--font-weight: 400;
+  --text-headline-xl: 40px;
+  --text-headline-xl--line-height: 48px;
+  --text-headline-xl--letter-spacing: -0.025em;
+  --text-headline-xl--font-weight: 500;
+  --text-headline-lg: 28px;
+  --text-headline-lg--line-height: 36px;
+  --text-headline-lg--letter-spacing: -0.02em;
+  --text-headline-lg--font-weight: 500;
+  --text-headline-md: 22px;
+  --text-headline-md--line-height: 30px;
+  --text-headline-md--letter-spacing: -0.015em;
+  --text-headline-md--font-weight: 600;
+  --text-headline-sm: 18px;
+  --text-headline-sm--line-height: 26px;
+  --text-headline-sm--letter-spacing: -0.01em;
+  --text-headline-sm--font-weight: 600;
+  --text-body-lg: 16px;
+  --text-body-lg--line-height: 26px;
+  --text-body-lg--letter-spacing: -0.005em;
+  --text-body-lg--font-weight: 400;
+  --text-body-md: 14px;
+  --text-body-md--line-height: 22px;
+  --text-body-md--letter-spacing: 0em;
+  --text-body-md--font-weight: 400;
+  --text-body-sm: 12px;
+  --text-body-sm--line-height: 18px;
+  --text-body-sm--letter-spacing: 0.01em;
+  --text-body-sm--font-weight: 400;
+  --text-mono-label: 11px;
+  --text-mono-label--line-height: 16px;
+  --text-mono-label--letter-spacing: 0.06em;
+  --text-mono-label--font-weight: 500;
+  --text-mono-metric: 13px;
+  --text-mono-metric--line-height: 18px;
+  --text-mono-metric--letter-spacing: -0.01em;
+  --text-mono-metric--font-weight: 500;
+}
+
+/* ============================================================
+   Base layer — copied verbatim from the approved pages
+   ============================================================ */
+@layer base {
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+  }
+  body {
+    overscroll-behavior: none;
+  }
+  main > :first-child {
+    margin-top: 0 !important;
+  }
+  main > :last-child {
+    margin-bottom: 0 !important;
+  }
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Thin scrollbar used by the Control Plane transaction feed */
+.custom-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+.custom-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scroll::-webkit-scrollbar-thumb {
+  background: #e7e5e4;
+  border-radius: 4px;
+}
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+  background: #d6d3d1;
+}
