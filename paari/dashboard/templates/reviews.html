@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Paari — Pending Reviews</title>
+  <link rel="stylesheet" href="/static/app.css" />
+</head>
+<body>
+  <main>
+    <h1>Paari Merchant Dashboard</h1>
+    <p>Signed in as {{ session.email }}</p>
+    {% if error %}<p class="error">{{ error }}</p>{% endif %}
+
+    <h2>Pending reviews ({{ reviews|length }})</h2>
+    {% if reviews %}
+    <table class="reviews">
+      <thead>
+        <tr>
+          <th>Review ID</th>
+          <th>Transaction</th>
+          <th>Triggered by</th>
+          <th>Reason</th>
+          <th>SLA expires</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in reviews %}
+        <tr>
+          <td><code>{{ r.id[:8] }}</code></td>
+          <td><a href="/dashboard/transactions/{{ r.transaction_id }}"><code>{{ r.transaction_id[:8] }}</code></a></td>
+          <td>{{ r.triggered_by }}</td>
+          <td>{{ r.reason }}</td>
+          <td>{{ r.sla_expires_at }}</td>
+          <td>
+            <form method="post" action="/dashboard/reviews/{{ r.id }}/approve" style="display:inline">
+              <button type="submit">Approve</button>
+            </form>
+            <form method="post" action="/dashboard/reviews/{{ r.id }}/deny" style="display:inline">
+              <button type="submit" class="deny">Deny</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p>No pending reviews.</p>
+    {% endif %}
+
+    <p><a href="/dashboard/audit">View audit log</a> | <a href="/dashboard/logout">Logout</a></p>
+  </main>
+</body>
+</html>

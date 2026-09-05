@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Paari — Transaction {{ tx.display_id if tx else display_id }}</title>
+  <link rel="stylesheet" href="/static/app.css" />
+</head>
+<body>
+  <main>
+    <h1>Paari Transaction</h1>
+    <p>Signed in as {{ session.email }} | <a href="/dashboard">Reviews</a> | <a href="/dashboard/audit">Audit</a> | <a href="/dashboard/logout">Logout</a></p>
+    {% if error %}
+      <p class="error">{{ error }}</p>
+    {% else %}
+    <h2>{{ tx.display_id }} — {{ decision }}</h2>
+    <table>
+      <tr><th>Transaction</th><td><code>{{ tx.display_id }}</code> ({{ tx.id[:8] }})</td></tr>
+      <tr><th>Buyer</th><td><code>{{ tx.buyer_agent_id }}</code></td></tr>
+      <tr><th>Merchant</th><td><code>{{ tx.merchant_agent_id }}</code></td></tr>
+      <tr><th>Quote</th><td><code>{{ tx.quote_id }}</code> {% if quote %} amount={{ quote.amount_paise }} state={{ quote.state }}{% endif %}</td></tr>
+      <tr><th>Amount</th><td>{{ tx.amount_paise }} paise (Rs {{ "%.2f"|format(tx.amount_paise/100) }}) {{ tx.currency }}</td></tr>
+      <tr><th>State</th><td><strong>{{ tx.state }}</strong></td></tr>
+      <tr><th>Decision</th><td><strong>{{ decision }}</strong></td></tr>
+      <tr><th>Razorpay Order</th><td><code>{{ tx.razorpay_order_id or "NOT CREATED" }}</code></td></tr>
+      <tr><th>Razorpay Payment</th><td><code>{{ tx.razorpay_payment_id or "—" }}</code></td></tr>
+    </table>
+
+    <h3>Governance — Why</h3>
+    {% if checks %}
+    <table>
+      <thead><tr><th>Check</th><th>Status</th><th>Reason</th></tr></thead>
+      <tbody>
+        {% for c in checks %}
+        <tr>
+          <td>{{ c.action.replace("GOVERNANCE_CHECK:","") }}</td>
+          <td>{{ c.decision }}</td>
+          <td><code>{{ c.payload_json[:200] }}</code></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p>No governance checks found for this transaction (audit may be filtered).</p>
+    {% endif %}
+
+    <h3>Payment — Bounded Authority</h3>
+    {% if sessions %}
+    <table>
+      <thead><tr><th>Session</th><th>Amount</th><th>Status</th><th>Expires</th></tr></thead>
+      <tbody>
+        {% for s in sessions %}
+        <tr><td><code>{{ s.display_id }}</code></td><td>{{ s.authorized_amount }}</td><td>{{ s.status }}</td><td>{{ s.expires_at }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p>Session: NOT CREATED</p>
+    {% endif %}
+    {% if capabilities %}
+    <table>
+      <thead><tr><th>Capability</th><th>Action</th><th>Max</th><th>Used</th></tr></thead>
+      <tbody>
+        {% for c in capabilities %}
+        <tr><td><code>{{ c.display_id }}</code></td><td>{{ c.action }}</td><td>{{ c.max_amount }}</td><td>{{ c.used }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p>Capability: NOT CREATED</p>
+    {% endif %}
+    {% if pay_events %}
+    <p>Payment events: {% for e in pay_events %}<code>{{ e.event_type }}</code> {% endfor %}</p>
+    {% else %}
+    <p>Razorpay: NOT CALLED (no payment_events)</p>
+    {% endif %}
+
+    <h3>Fulfillment</h3>
+    <p>
+      {% if tx.state == "PAYMENT_VERIFIED" %}AUTHORIZED — ready for Shopify order
+      {% elif tx.state == "COMPLETED" %}COMPLETED
+      {% elif tx.state == "PAYMENT_FAILED" %}BLOCKED — payment failed, no fulfillment
+      {% elif tx.state == "DENIED" %}BLOCKED — governance denied
+      {% elif tx.state == "REVIEW_REQUIRED" %}PENDING — awaiting human review
+      {% else %}{{ tx.state }}{% endif %}
+    </p>
+
+    <h3>Audit Timeline</h3>
+    <table>
+      <thead><tr><th>Time</th><th>Action</th><th>Decision</th></tr></thead>
+      <tbody>
+        {% for e in audit %}
+        <tr><td>{{ e.created_at }}</td><td>{{ e.action }}</td><td>{{ e.decision }}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% endif %}
+    <p><a href="/dashboard">Back to reviews</a></p>
+  </main>
+</body>
+</html>

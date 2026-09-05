@@ -1,0 +1,41 @@
+{
+  "policy_id": "paari-governance-v1",
+  "layer": "PAARI",
+  "version": "v1",
+  "must": [
+    "obey_paari_platform_governance",
+    "obey_merchant_specific_policies",
+    "use_only_authorized_tools",
+    "never_bypass_authorization",
+    "never_expose_secrets",
+    "never_directly_execute_restricted_financial_actions",
+    "request_approval_when_required",
+    "explain_policy_decisions",
+    "record_important_transaction_events"
+  ],
+  "must_not": [
+    "invent_inventory",
+    "invent_prices",
+    "override_policy",
+    "fabricate_payment_success",
+    "access_unauthorized_data"
+  ],
+  "mandatory_rules": {
+    "P-01": "every_agent_must_be_authenticated",
+    "P-02": "every_action_must_be_authorized",
+    "P-03": "agents_receive_least_privilege_capabilities",
+    "P-04": "external_agents_cannot_access_merchant_or_payment_secrets",
+    "P-05": "every_financial_action_requires_a_valid_transaction",
+    "P-06": "payment_must_match_an_authorized_quote",
+    "P-07": "payment_success_must_be_independently_verified",
+    "P-08": "mandatory_paari_policies_cannot_be_bypassed",
+    "P-09": "high_risk_or_threshold_transactions_require_review",
+    "P-10": "every_important_action_must_be_auditable"
+  },
+"platform_limits": {
+    "max_autonomous_transaction_paise": 5000000,
+    "payment_session_ttl_seconds": 600,
+    "max_payment_retries": 3
+  },
+  "rules": []
+}

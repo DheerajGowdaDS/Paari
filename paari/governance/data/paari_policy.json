@@ -1,0 +1,13 @@
+{
+  "policy_id": "paari-policy-v1",
+  "layer": "PAARI",
+  "version": "v1",
+  "rules": [
+    {
+      "id": "P-AUTONOMOUS-CEILING",
+      "when": { "field": "tx.amount_paise", "op": "gt", "value": 5000000 },
+      "decision": "REVIEW",
+      "reason": "Exceeds Paari platform autonomous ceiling (₹50,000)"
+    }
+  ]
+}

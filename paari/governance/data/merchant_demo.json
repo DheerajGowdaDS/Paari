@@ -1,0 +1,25 @@
+{
+  "policy_id": "merchant-demo-v1",
+  "layer": "MERCHANT",
+  "version": "v1",
+  "rules": [
+    {
+      "id": "M-01",
+      "when": { "field": "tx.amount_paise", "op": "gt", "value": 2000000 },
+      "decision": "REVIEW",
+      "reason": "Exceeds merchant autonomous limit (₹20,000)"
+    },
+    {
+      "id": "M-02",
+      "when": { "field": "tx.discount_pct", "op": "gt", "value": 10 },
+      "decision": "DENY",
+      "reason": "Discount exceeds merchant max (10%)"
+    },
+    {
+      "id": "M-03",
+      "when": { "field": "tx.quantity", "op": "gt", "value": 5 },
+      "decision": "DENY",
+      "reason": "Quantity exceeds merchant max (5)"
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "merchant_id": "merchant-demo-001",
+  "shipping_policy": "Standard shipping within India. International shipping unavailable.",
+  "return_policy": "30-day returns on unworn items with original tags.",
+  "agents_md": "# Demo Shoes\n\nStatus: AI-TRANSACTABLE\n\nCapabilities:\n- Search\n- Inventory\n- Deal\n- Quote\n- Checkout\n\nRestrictions:\n- ₹20,000 max autonomous transaction\n- International shipping unavailable\n- 30-day returns\n"
+}

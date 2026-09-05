@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Razorpay Checkout — Paari Phase A</title>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 480px; margin: 3rem auto; padding: 0 1rem; color: #1a1a1a; }
+    label { display: block; font-weight: 600; margin: 1rem 0 0.25rem; }
+    input[type=text], input[type=number] { width: 100%; padding: 0.5rem; font-size: 1rem; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+    button { margin-top: 1rem; padding: 0.6rem 1.2rem; font-size: 1rem; background: #0a0a0a; color: #fff; border: none; border-radius: 4px; cursor: pointer; }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    #result { margin-top: 1.5rem; padding: 1rem; border-radius: 4px; white-space: pre-wrap; word-break: break-all; }
+    .ok    { background: #d4edda; border: 1px solid #28a745; }
+    .fail  { background: #f8d7da; border: 1px solid #dc3545; }
+    .error { background: #fff3cd; border: 1px solid #ffc107; }
+    a { color: #0a0a0a; }
+  </style>
+</head>
+<body>
+  <h1>Razorpay Checkout</h1>
+  <p>Paari Phase A — standalone Razorpay Test Mode verification</p>
+
+  <form id="pay-form">
+    <label for="amount">Amount (INR, whole rupees)</label>
+    <input id="amount" type="number" value="100" min="1" step="1" required />
+
+    <button type="submit" id="pay-btn">Pay with Razorpay</button>
+  </form>
+
+  <div id="result"></div>
+
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script>
+    const KEY_ID   = "{{ key_id }}";
+    const AMOUNT   = {{ amount_paise }};   // paise
+    const VERIFY_URL = "{{ verify_url }}";
+
+    const form  = document.getElementById("pay-form");
+    const btn   = document.getElementById("pay-btn");
+    const out   = document.getElementById("result");
+
+    function show(html, cls) {
+      out.className = cls || "";
+      out.textContent = html;
+    }
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      const rupees = parseInt(document.getElementById("amount").value, 10);
+      const amountPaise = rupees * 100;
+      btn.disabled = true;
+      show("Creating order...", "error");
+
+      fetch("/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: "amount=" + encodeURIComponent(amountPaise),
+      })
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (data.error) { show("Order creation failed: " + data.error, "fail"); btn.disabled = false; return; }
+        openRazorpay(data.order_id, amountPaise, data.receipt);
+      })
+      .catch(function (err) {
+        show("Network error: " + err.message, "fail");
+        btn.disabled = false;
+      });
+    });
+
+    function openRazorpay(orderId, amountPaise, receipt) {
+      var options = {
+        key: KEY_ID,
+        amount: amountPaise,
+        currency: "INR",
+        name: "Paari Test",
+        description: "Phase A standalone verification",
+        order_id: orderId,
+        receipt: receipt,
+        handler: function (response) {
+          show("Verifying signature...", "error");
+          fetch(VERIFY_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              razorpay_order_id:   response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature:  response.razorpay_signature,
+            }),
+          })
+          .then(function (r) { return r.json(); })
+          .then(function (data) {
+            if (data.verified) {
+              show("[VERIFIED]\n" + JSON.stringify(data, null, 2), "ok");
+            } else {
+              show("[NOT VERIFIED]\n" + JSON.stringify(data, null, 2), "fail");
+            }
+            btn.disabled = false;
+          })
+          .catch(function (err) {
+            show("Verify error: " + err.message, "fail");
+            btn.disabled = false;
+          });
+        },
+        prefill: { name: "Test User", email: "test@razorpay.com", contact: "9999999999" },
+        notes: { phase: "A", mode: "standalone" },
+        payment_capture: 1,
+        onFailure: function (err) {
+          show("[PAYMENT FAILED]\n" + JSON.stringify(err, null, 2), "fail");
+          btn.disabled = false;
+        },
+      };
+      var rzp = new Razorpay(options);
+      rzp.open();
+    }
+  </script>
+</body>
+</html>

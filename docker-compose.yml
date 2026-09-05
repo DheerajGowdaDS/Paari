@@ -1,0 +1,27 @@
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: paari
+      POSTGRES_USER: paari
+      POSTGRES_PASSWORD: paari_dev_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - paari_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U paari"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - paari_redisdata:/data
+
+volumes:
+  paari_pgdata:
+  paari_redisdata:

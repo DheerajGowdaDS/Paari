@@ -1,0 +1,47 @@
+{
+  "merchant_id": "merchant-demo-001",
+  "store": {
+    "name": "Demo Shoes",
+    "international_shipping": false,
+    "active_hours_utc": [9, 10, 11, 12, 13, 14, 15, 16, 17]
+  },
+  "products": [
+    {
+      "sku": "SKU-001",
+      "name": "Classic Leather Sneaker",
+      "price_paise": 120000,
+      "currency": "INR",
+      "inventory": 12,
+      "variants": ["black", "white"],
+      "international_shipping": false
+    },
+    {
+      "sku": "SKU-002",
+      "name": "Running Shoe Pro",
+      "price_paise": 180000,
+      "currency": "INR",
+      "inventory": 5,
+      "variants": ["blue", "red"],
+      "international_shipping": false
+    },
+    {
+      "sku": "SKU-003",
+      "name": "Canvas Slip-On",
+      "price_paise": 90000,
+      "currency": "INR",
+      "inventory": 0,
+      "variants": ["beige"],
+      "international_shipping": false
+    },
+    {
+      "sku": "SKU-004",
+      "name": "Nike Runner",
+      "price_paise": 479900,
+      "currency": "INR",
+      "inventory": 8,
+      "variants": ["black", "white"],
+      "international_shipping": false
+    }
+  ],
+  "average_transaction_paise": 120000
+}

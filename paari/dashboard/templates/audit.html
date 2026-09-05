@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Paari — Audit Log</title>
+  <link rel="stylesheet" href="/static/app.css" />
+</head>
+<body>
+  <main>
+    <h1>Paari Audit Log</h1>
+    <p>Signed in as {{ session.email }}</p>
+    <table class="audit">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Request</th>
+          <th>Action</th>
+          <th>Decision</th>
+          <th>Policy</th>
+          <th>Risk</th>
+          <th>Created</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for e in events %}
+        <tr>
+          <td><code>{{ e.id[:8] }}</code></td>
+          <td><code>{{ e.request_id[:8] }}</code></td>
+          <td>{{ e.action }}</td>
+          <td>{{ e.decision }}</td>
+          <td>{{ e.policy_version }}</td>
+          <td>{{ e.risk_score }}</td>
+          <td>{{ e.created_at }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <p><a href="/dashboard">Back to reviews</a> | <a href="/dashboard/logout">Logout</a></p>
+  </main>
+</body>
+</html>

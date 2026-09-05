@@ -1,0 +1,13 @@
+{
+  "policy_id": "store-demo-v1",
+  "layer": "STORE",
+  "version": "v1",
+  "rules": [
+    {
+      "id": "S-01",
+      "when": { "field": "tx.international", "op": "eq", "value": true },
+      "decision": "DENY",
+      "reason": "International shipping unavailable"
+    }
+  ]
+}
